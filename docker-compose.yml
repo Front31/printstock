@@ -12,11 +12,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./backups:/backups
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-printstock}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - printstock-network
 
@@ -27,11 +22,6 @@ services:
     command: redis-server --appendonly yes
     volumes:
       - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - printstock-network
 
@@ -47,17 +37,10 @@ services:
       REDIS_URL: redis://redis:6379
       PORT: ${BACKEND_PORT:-3001}
     depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - db
+      - redis
     volumes:
       - ./backend/uploads:/app/uploads
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     networks:
       - printstock-network
 
@@ -75,11 +58,6 @@ services:
       - "${FRONTEND_PORT:-3000}:3000"
     depends_on:
       - backend
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     networks:
       - printstock-network
 
@@ -94,11 +72,6 @@ services:
     depends_on:
       - frontend
       - backend
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     networks:
       - printstock-network
 
