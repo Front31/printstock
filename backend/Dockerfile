@@ -1,44 +1,32 @@
-FROM node:20-slim AS builder
-
+FROM node:20-alpine AS builder
 WORKDIR /app
-
-RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
-
 COPY package*.json ./
-COPY tsconfig.json ./
-COPY nest-cli.json ./
 COPY prisma ./prisma/
-
 RUN npm install
-
-COPY src ./src
-
+COPY . .
 RUN npx prisma generate
 RUN npm run build
 
-# Prüfe ob dist existiert
-RUN ls -la dist/
-
-FROM node:20-slim
-
+FROM node:20-alpine
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y openssl ca-certificates curl && rm -rf /var/lib/apt/lists/*
+# NUR dumb-init installieren, KEIN curl
+RUN apk add --no-cache dumb-init
 
 COPY package*.json ./
 COPY prisma ./prisma/
-
-RUN npm install --production
-
+RUN npm install --production && npm cache clean --force
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
-RUN ls -la dist/
-
 RUN mkdir -p /app/uploads && chown -R node:node /app
-
 USER node
 
 EXPOSE 3001
 
+# Health check OHNE curl
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3001/health', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) })"
+
+ENTRYPOINT ["dumb-init", "--"]
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
