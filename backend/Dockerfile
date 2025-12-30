@@ -2,44 +2,38 @@ FROM node:20-slim AS builder
 
 WORKDIR /app
 
-# Debian dependencies
-RUN apt-get update && apt-get install -y \
-    openssl \
-    libssl-dev \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
+COPY tsconfig.json ./
+COPY nest-cli.json ./
 COPY prisma ./prisma/
 
 RUN npm install
 
-COPY . .
+COPY src ./src
 
-# Prisma für Linux generieren
 RUN npx prisma generate
-
 RUN npm run build
 
-# Production stage
+# Prüfe ob dist existiert
+RUN ls -la dist/
+
 FROM node:20-slim
 
 WORKDIR /app
 
-# Production dependencies
-RUN apt-get update && apt-get install -y \
-    openssl \
-    ca-certificates \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y openssl ca-certificates curl && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
 COPY prisma ./prisma/
 
-RUN npm install --production && npm cache clean --force
+RUN npm install --production
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+
+RUN ls -la dist/
 
 RUN mkdir -p /app/uploads && chown -R node:node /app
 
@@ -47,7 +41,4 @@ USER node
 
 EXPOSE 3001
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD curl -f http://localhost:3001/health || exit 1
-
-CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed || true && node dist/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
