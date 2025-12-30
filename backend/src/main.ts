@@ -6,9 +6,12 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // CORS für alle Origins erlauben
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: true,  // Erlaubt alle Origins
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   app.useGlobalPipes(
@@ -23,11 +26,6 @@ async function bootstrap() {
     .setTitle('PrintStock API')
     .setDescription('3D Printing Inventory Management API')
     .setVersion('1.0')
-    .addTag('filaments')
-    .addTag('printers')
-    .addTag('nozzles')
-    .addTag('models')
-    .addTag('dashboard')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
