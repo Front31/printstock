@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model FilamentSpool {
+  id              String   @id @default(uuid())
+  brand           String
+  material        String
+  colorName       String
+  colorHex        String
+  diameter        Float
+  totalWeight     Int
+  remainingWeight Int
+  price           Float
+  purchaseDate    DateTime @default(now())
+  store           String?
+  url             String?
+  opened          Boolean  @default(false)
+  openedDate      DateTime?
+  location        String?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  usages FilamentUsage[]
+
+  @@index([material])
+  @@index([opened])
+  @@index([brand])
+}
+
+model FilamentUsage {
+  id              String   @id @default(uuid())
+  filamentSpoolId String
+  filamentSpool   FilamentSpool @relation(fields: [filamentSpoolId], references: [id], onDelete: Cascade)
+  
+  gramsUsed       Int
+  usageDate       DateTime @default(now())
+  
+  printerId       String?
+  printer         Printer? @relation(fields: [printerId], references: [id], onDelete: SetNull)
+  
+  modelId         String?
+  model           Model?   @relation(fields: [modelId], references: [id], onDelete: SetNull)
+  
+  notes           String?
+  createdAt       DateTime @default(now())
+
+  @@index([filamentSpoolId])
+  @@index([printerId])
+  @@index([usageDate])
+}
+
+model Printer {
+  id              String   @id @default(uuid())
+  name            String
+  model           String
+  notes           String?
+  
+  currentNozzleId String?  @unique
+  currentNozzle   Nozzle?  @relation("CurrentNozzle", fields: [currentNozzleId], references: [id], onDelete: SetNull)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  usages          FilamentUsage[]
+  nozzles         Nozzle[] @relation("PrinterNozzles")
+
+  @@index([name])
+}
+
+model Nozzle {
+  id              String   @id @default(uuid())
+  size            Float
+  material        String
+  condition       String
+  notes           String?
+  
+  printerId       String?
+  printer         Printer? @relation("PrinterNozzles", fields: [printerId], references: [id], onDelete: SetNull)
+  
+  printerUsing    Printer? @relation("CurrentNozzle")
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([size])
+  @@index([printerId])
+}
+
+model Model {
+  id              String   @id @default(uuid())
+  name            String
+  link            String?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tags            Tag[]
+  usages          FilamentUsage[]
+
+  @@index([name])
+}
+
+model Tag {
+  id              String   @id @default(uuid())
+  name            String   @unique
+  createdAt       DateTime @default(now())
+
+  models          Model[]
+
+  @@index([name])
+}
