@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Package, Printer, CircleDot, Plus, Sun, Moon, Monitor, Search } from 'lucide-react'
+import { Package, Printer, CircleDot, Sun, Moon, Monitor } from 'lucide-react'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 
@@ -11,27 +11,36 @@ export default function Home() {
   const [materials, setMaterials] = useState<any[]>([])
   const [filaments, setFilaments] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'system'
     setTheme(savedTheme)
-    applyTheme(savedTheme)
+    updateTheme(savedTheme)
     fetchData()
   }, [])
 
-  const applyTheme = (newTheme: string) => {
+  useEffect(() => {
+    updateTheme(theme)
+  }, [theme])
+
+  const updateTheme = (newTheme: string) => {
     const root = document.documentElement
-    if (newTheme === 'dark' || (newTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const shouldBeDark = newTheme === 'dark' || (newTheme === 'system' && prefersDark)
+    
+    if (shouldBeDark) {
       root.classList.add('dark')
+      setIsDark(true)
     } else {
       root.classList.remove('dark')
+      setIsDark(false)
     }
   }
 
   const changeTheme = (newTheme: string) => {
     setTheme(newTheme)
     localStorage.setItem('theme', newTheme)
-    applyTheme(newTheme)
   }
 
   const fetchData = async () => {
@@ -55,8 +64,6 @@ export default function Home() {
       setLoading(false)
     }
   }
-
-  const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
   if (loading) {
     return (
@@ -217,9 +224,6 @@ export default function Home() {
         <div className="mt-8 text-center">
           <p className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>
             PrintStock v1.0 - 3D Druck Inventarverwaltung
-          </p>
-          <p className={`text-xs mt-2 ${isDark ? 'text-gray-600' : 'text-gray-500'}`}>
-            API: {API_URL}
           </p>
         </div>
       </main>
