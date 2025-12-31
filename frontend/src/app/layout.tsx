@@ -4,10 +4,15 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'PrintStock - 3D Printing Inventory',
+export const metadata = {
+  title: 'PrintStock',
   description: 'Manage your 3D printing filament inventory',
-}
+  manifest: '/site.webmanifest',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+};
 
 export default function RootLayout({
   children,
