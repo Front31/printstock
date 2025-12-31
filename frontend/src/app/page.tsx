@@ -185,11 +185,17 @@ export default function Home() {
         : `${API_URL}/filaments`
       const method = editingItem ? 'PATCH' : 'POST'
 
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(filamentForm),
-      })
+    const { id, createdAt, updatedAt, usages, ...payload } = filamentForm as any;
+
+    if (payload.purchaseDate && /^\d{4}-\d{2}-\d{2}$/.test(payload.purchaseDate)) {
+      payload.purchaseDate = `${payload.purchaseDate}T00:00:00.000Z`;
+    }
+    
+    const response = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
 
       if (response.ok) {
         await fetchData()
@@ -507,7 +513,15 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <button onClick={() => { setEditingItem(fil); setFilamentForm(fil); setShowFilamentModal(true); }} className="p-2 rounded-lg hover:bg-gray-800">
+                      <button
+                        onClick={() => {
+                          const { id, createdAt, updatedAt, usages, ...clean } = fil;
+                          setEditingItem({ id });           // wir brauchen nur die id fürs PATCH
+                          setFilamentForm(clean);           // Formular darf KEINE Meta-Felder enthalten
+                          setShowFilamentModal(true);
+                        }}
+                        className="p-2 rounded-lg hover:bg-gray-800"
+                      >
                         <Edit2 size={14} />
                       </button>
                       <button onClick={() => deleteFilament(fil.id)} className="p-2 rounded-lg hover:bg-gray-800 text-red-500">
