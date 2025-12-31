@@ -218,34 +218,37 @@ export default function Home() {
     })
     setShowFilamentModal(true)
   }
-
+  
   const saveFilament = async () => {
     if (!filamentForm.brand || !filamentForm.colorName) {
       alert('Bitte Hersteller und Farbe ausfüllen!')
       return
     }
-
+  
+    const payload = {
+      ...filamentForm,
+      material: filamentForm.material.trim(),
+      brand: filamentForm.brand.trim(),
+      colorName: filamentForm.colorName.trim(),
+    }
+  
     try {
-      const url = editingItem ? `${API_URL}/filaments/${editingItem.id}` : `${API_URL}/filaments`
+      const url = editingItem
+        ? `${API_URL}/filaments/${editingItem.id}`
+        : `${API_URL}/filaments`
       const method = editingItem ? 'PATCH' : 'POST'
-
-      // ✅ Meta-Felder droppen + Datum Prisma-kompatibel machen
-      const { id, createdAt, updatedAt, usages, ...payload } = (filamentForm as any) ?? {}
-      if (payload.purchaseDate && /^\d{4}-\d{2}-\d{2}$/.test(payload.purchaseDate)) {
-        payload.purchaseDate = `${payload.purchaseDate}T00:00:00.000Z`
-      }
-
+  
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
-
+  
       if (response.ok) {
         await fetchData()
         setShowFilamentModal(false)
       } else {
-        const error = await response.json().catch(() => ({}))
+        const error = await response.json()
         alert('Fehler: ' + (error.message || 'Speichern fehlgeschlagen'))
       }
     } catch (error) {
@@ -729,11 +732,22 @@ export default function Home() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Material *</label>
-                  <select value={filamentForm.material} onChange={(e) => setFilamentForm({ ...filamentForm, material: e.target.value })} className="select">
-                    {MATERIALS.map((m) => <option key={m} value={m}>{m}</option>)}
-                  </select>
-                </div>
+                <label className="block text-sm font-medium mb-2">Material *</label>
+              
+                <input
+                  className="input"
+                  list="material-options"
+                  value={filamentForm.material}
+                  onChange={(e) => setFilamentForm({ ...filamentForm, material: e.target.value })}
+                  placeholder="z.B. PLA Matte, PAHT-CF, ..."
+                />
+              
+                <datalist id="material-options">
+                  {MATERIALS.map((m) => (
+                    <option key={m} value={m} />
+                  ))}
+                </datalist>
+              </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-2">Farbe *</label>
