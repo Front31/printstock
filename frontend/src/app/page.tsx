@@ -321,10 +321,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                <Package size={24} className="text-white" />
+              <div className="flex items-center gap-3">
+                <img
+                  src={isDark ? '/logo-dark.png' : '/logo-light.png'}
+                  alt="PrintStock Logo"
+                  className="w-10 h-10 md:w-11 md:h-11 rounded-lg object-contain"
+                />
+                <h1 className="text-xl md:text-2xl font-bold">PrintStock</h1>
               </div>
-              <h1 className="text-xl md:text-2xl font-bold">PrintStock</h1>
             </div>
 
             {/* Desktop Nav */}
