@@ -5,7 +5,57 @@ import { Package, Printer, CircleDot, Plus, Sun, Moon, Monitor, X, Edit2, Trash2
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 
-const MATERIALS = ['PLA', 'PETG', 'ABS', 'TPU', 'ASA', 'Nylon', 'HIPS', 'PLA+', 'PETG+']
+const MATERIALS = [
+  // Standard
+  'PLA', 'PETG', 'ABS', 'TPU', 'ASA', 'Nylon', 'HIPS', 'PVA', 'PC',
+
+  // Bambu PLA
+  'PLA Basic',
+  'PLA Matte',
+  'PLA Tough+',
+  'PLA Silk',
+  'PLA Silk+',
+  'PLA Silk Multi-Color',
+  'PLA Translucent',
+  'PLA Galaxy',
+  'PLA Metal',
+  'PLA Marble',
+  'PLA Wood',
+  'PLA Sparkle',
+  'PLA Glow',
+  'PLA Basic Gradient',
+  'PLA Aero',
+  'PLA-CF',
+
+  // Bambu PETG
+  'PETG HF',
+  'PETG Translucent',
+  'PETG-CF',
+
+  // Bambu ABS / ASA
+  'ABS-GF',
+  'ASA Aero',
+  'ASA-CF',
+
+  // Bambu TPU
+  'TPU 85A/TPU 90A',
+  'TPU for AMS',
+  'TPU 95A HF',
+
+  // Support
+  'Support for PLA',
+  'Support for PLA/PETG',
+  'Support for ABS',
+  'Support for PA/PET',
+
+  // Engineering / CF/GF (aus deinen Screens)
+  'PA6-GF',
+  'PA6-CF',
+  'PAHT-CF',
+  'PPA-CF',
+  'PET-CF',
+  'PC FR',
+];
 const BRANDS = ['Prusament', 'eSUN', 'Polymaker', 'Overture', 'ColorFabb', 'Sunlu', 'Bambu Lab', 'Hatchbox', 'Andere']
 const PRESET_COLORS = [
   { name: 'Schwarz', hex: '#000000' },
