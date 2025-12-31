@@ -323,7 +323,7 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-3">
                 <img
-                  src={isDark ? '/logo-dark.png' : '/logo-light.png'}
+                  src="/logo.png"
                   alt="PrintStock Logo"
                   className="w-10 h-10 md:w-11 md:h-11 rounded-lg object-contain"
                 />
