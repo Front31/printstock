@@ -4,42 +4,38 @@
 
 :root {
   /* Brand */
-  --accent: 0 174 66; /* #00ae42 als RGB */
-  --accent-foreground: 255 255 255;
+  --primary: 0 174 66;              /* #00ae42 */
+  --primary-foreground: 255 255 255;
 
-  /* Light (neutral) */
-  --bg: 248 250 252;
-  --fg: 17 24 39;
+  /* Light */
+  --background: 245 246 247;        /* #f5f6f7 */
+  --foreground: 17 24 39;
 
-  --card: 255 255 255;
-  --card-foreground: 17 24 39;
-
-  --muted: 243 244 246;
-  --muted-foreground: 107 114 128;
+  --surface: 255 255 255;
+  --surface-foreground: 17 24 39;
 
   --border: 229 231 235;
-  --input: 229 231 235;
+  --muted: 243 244 246;
+  --muted-foreground: 107 114 128;
 }
 
 .dark {
-  /* Dark (neutral-grau, nicht bluish) */
-  --bg: 9 9 11;            /* zinc-950 */
-  --fg: 244 244 245;        /* zinc-100 */
+  /* Dark (neutral grey, no bluish) */
+  --background: 18 18 18;           /* #121212 */
+  --foreground: 244 244 245;
 
-  --card: 24 24 27;         /* zinc-900 */
-  --card-foreground: 244 244 245;
+  --surface: 26 26 26;              /* #1a1a1a */
+  --surface-foreground: 244 244 245;
 
-  --muted: 39 39 42;        /* zinc-800 */
-  --muted-foreground: 161 161 170; /* zinc-400 */
-
-  --border: 39 39 42;       /* zinc-800 */
-  --input: 63 63 70;        /* zinc-700 */
+  --border: 42 42 42;               /* #2a2a2a */
+  --muted: 39 39 42;                /* zinc-800 vibe */
+  --muted-foreground: 156 163 175;  /* #9ca3af */
 }
 
-/* Optional: nicer focus outline global */
+/* optional: nicer focus ring everywhere */
 :focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(var(--accent), 0.35);
+  box-shadow: 0 0 0 3px rgba(0, 174, 66, 0.35);
 }
 
 @layer components {
