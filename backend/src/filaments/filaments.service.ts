@@ -4,6 +4,19 @@ import { CreateFilamentDto } from './dto/create-filament.dto';
 import { UpdateFilamentDto } from './dto/update-filament.dto';
 import { CreateUsageDto } from './dto/create-usage.dto';
 
+function normalizePurchaseDate(value?: string | Date | null): Date | null {
+  if (!value) return null;
+
+  if (value instanceof Date) return value;
+
+  // HTML date input: "YYYY-MM-DD" → Prisma erwartet DateTime
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return new Date(`${value}T00:00:00.000Z`);
+  }
+
+  return new Date(value);
+}
+
 @Injectable()
 export class FilamentsService {
   constructor(private prisma: PrismaService) {}
@@ -54,12 +67,26 @@ export class FilamentsService {
   }
 
   async create(dto: CreateFilamentDto) {
-    return this.prisma.filamentSpool.create({ data: dto });
+    return this.prisma.filamentSpool.create({
+      data: {
+        ...dto,
+        purchaseDate: normalizePurchaseDate((dto as any).purchaseDate),
+      },
+    });
   }
 
   async update(id: string, dto: UpdateFilamentDto) {
     await this.findOne(id);
-    return this.prisma.filamentSpool.update({ where: { id }, data: dto });
+    return this.prisma.filamentSpool.update({
+      where: { id },
+      data: {
+        ...dto,
+        // nur setzen, wenn im DTO vorhanden (sonst undefined lassen)
+        ...(dto as any).purchaseDate !== undefined
+          ? { purchaseDate: normalizePurchaseDate((dto as any).purchaseDate) }
+          : {},
+      },
+    });
   }
 
   async remove(id: string) {
