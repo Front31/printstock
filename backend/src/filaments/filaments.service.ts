@@ -77,14 +77,21 @@ export class FilamentsService {
 
   async update(id: string, dto: UpdateFilamentDto) {
     await this.findOne(id);
+  
+    const {
+      id: _id,
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      ...cleanDto
+    } = dto as any;
+  
     return this.prisma.filamentSpool.update({
       where: { id },
       data: {
-        ...dto,
-        // nur setzen, wenn im DTO vorhanden (sonst undefined lassen)
-        ...(dto as any).purchaseDate !== undefined
-          ? { purchaseDate: normalizePurchaseDate((dto as any).purchaseDate) }
-          : {},
+        ...cleanDto,
+        ...(cleanDto.purchaseDate !== undefined
+          ? { purchaseDate: normalizePurchaseDate(cleanDto.purchaseDate) }
+          : {}),
       },
     });
   }
