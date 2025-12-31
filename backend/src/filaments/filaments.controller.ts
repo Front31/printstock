@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { FilamentsService } from './filaments.service';
 import { CreateFilamentDto } from './dto/create-filament.dto';
@@ -41,6 +41,11 @@ export class FilamentsController {
   }
 
   @Patch(':id')
+  @UsePipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: false,
+    transform: true,
+  }))
   @ApiOperation({ summary: 'Update filament' })
   update(@Param('id') id: string, @Body() updateFilamentDto: UpdateFilamentDto) {
     return this.filamentsService.update(id, updateFilamentDto);
