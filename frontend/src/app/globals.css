@@ -49,6 +49,8 @@
   }
 
   .input {
-    @apply w-full rounded-lg border border-input bg-background px-4 py-2;
+    @apply w-full rounded-lg border bg-background-light dark:bg-background-dark px-4 py-2
+           border-border-light dark:border-border-dark
+           focus:outline-none focus:ring-2 focus:ring-primary;
   }
 }
