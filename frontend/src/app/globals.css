@@ -41,3 +41,18 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(var(--accent), 0.35);
 }
+
+@layer components {
+  .btn-accent {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition;
+    @apply bg-accent text-accent-foreground hover:opacity-90;
+  }
+
+  .card {
+    @apply rounded-2xl border border-border bg-card text-card-foreground;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-input bg-background px-4 py-2;
+  }
+}
