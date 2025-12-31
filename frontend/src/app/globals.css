@@ -3,12 +3,10 @@
 @tailwind utilities;
 
 :root {
-  /* Brand */
-  --primary: 0 174 66;              /* #00ae42 */
+  --primary: 0 174 66;
   --primary-foreground: 255 255 255;
 
-  /* Light */
-  --background: 245 246 247;        /* #f5f6f7 */
+  --background: 245 246 247;
   --foreground: 17 24 39;
 
   --surface: 255 255 255;
@@ -20,38 +18,39 @@
 }
 
 .dark {
-  /* Dark (neutral grey, no bluish) */
-  --background: 18 18 18;           /* #121212 */
+  --background: 18 18 18;
   --foreground: 244 244 245;
 
-  --surface: 26 26 26;              /* #1a1a1a */
+  --surface: 26 26 26;
   --surface-foreground: 244 244 245;
 
-  --border: 42 42 42;               /* #2a2a2a */
-  --muted: 39 39 42;                /* zinc-800 vibe */
-  --muted-foreground: 156 163 175;  /* #9ca3af */
+  --border: 42 42 42;
+  --muted: 39 39 42;
+  --muted-foreground: 156 163 175;
 }
 
-/* optional: nicer focus ring everywhere */
 :focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 174, 66, 0.35);
 }
 
 @layer components {
-  .btn-accent {
-    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition;
-    @apply bg-accent text-accent-foreground hover:opacity-90;
-  }
-
   .card {
-    @apply rounded-2xl border border-border bg-card text-card-foreground;
+    @apply rounded-2xl border border-border bg-surface text-surface-foreground;
   }
 
   .input {
-    @apply w-full rounded-lg border px-4 py-2
-           bg-bg-light dark:bg-bg-dark
-           border-border-light dark:border-border-dark
+    @apply w-full rounded-lg border border-border bg-background px-4 py-2 text-foreground
            focus:outline-none focus:ring-2 focus:ring-primary;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition;
+    @apply bg-primary text-primary-foreground hover:opacity-90;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-lg px-3 py-2 font-medium transition;
+    @apply bg-muted text-foreground hover:opacity-90;
   }
 }
