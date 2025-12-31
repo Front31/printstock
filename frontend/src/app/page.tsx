@@ -481,7 +481,7 @@ export default function Home() {
                 { label: 'Drucker', value: stats?.totalPrinters || 0, icon: Printer },
                 { label: 'Düsen', value: stats?.totalNozzles || 0, icon: CircleDot },
                 { label: 'Wenig Bestand', value: stats?.lowStockSpools || 0, icon: Package },
-                { label: 'Gesamtkosten', value: `€${totalCost.toFixed(2)}`, icon: Euro },
+                { label: 'Gesamtwert', value: `€${totalCost.toFixed(2)}`, icon: Euro },
                 { label: 'Gesamt Gewicht', value: `${totalWeight.toFixed(2)} kg`, icon: Weight },
               ].map((stat, i) => (
                 <div key={i} className="card p-4 md:p-6">
