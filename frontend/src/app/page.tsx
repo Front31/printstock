@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Package, Printer, CircleDot, Plus, Sun, Moon, Monitor, X, Edit2, Trash2, Save, Menu, Euro, Weight } from 'lucide-react'
+import { MaterialCombobox } from '@/components/MaterialCombobox'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 
@@ -731,22 +732,17 @@ export default function Home() {
                   </select>
                 </div>
 
-                <div>
+               <div>
                 <label className="block text-sm font-medium mb-2">Material *</label>
               
-                <input
-                  className="input"
-                  list="material-options"
+                <MaterialCombobox
                   value={filamentForm.material}
-                  onChange={(e) => setFilamentForm({ ...filamentForm, material: e.target.value })}
-                  placeholder="z.B. PLA Matte, PAHT-CF, ..."
+                  onChange={(val) =>
+                    setFilamentForm({ ...filamentForm, material: val })
+                  }
+                  options={MATERIALS}
+                  placeholder="Material wählen…"
                 />
-              
-                <datalist id="material-options">
-                  {MATERIALS.map((m) => (
-                    <option key={m} value={m} />
-                  ))}
-                </datalist>
               </div>
 
                 <div>
