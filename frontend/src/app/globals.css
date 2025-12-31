@@ -3,32 +3,54 @@
 @tailwind utilities;
 
 :root {
-  --primary: 0 174 66;
+  /* Accent */
+  --primary: 0 174 66;              /* #00ae42 */
+  --primary-hover: 0 150 54;        /* #009636 */
+  --primary-soft: 230 247 237;      /* #e6f7ed */
   --primary-foreground: 255 255 255;
 
-  --background: 245 246 247;
-  --foreground: 17 24 39;
+  /* Light (neutral) */
+  --background: 245 246 247;        /* #f5f6f7 */
+  --foreground: 17 24 39;           /* #111827 */
 
-  --surface: 255 255 255;
+  --surface: 255 255 255;           /* card/surface */
   --surface-foreground: 17 24 39;
 
-  --border: 229 231 235;
-  --muted: 243 244 246;
-  --muted-foreground: 107 114 128;
+  --muted: 243 244 246;             /* input/filter bg */
+  --muted-foreground: 107 114 128;  /* #6b7280 */
+
+  --border: 229 231 235;            /* #e5e7eb */
 }
 
 .dark {
-  --background: 18 18 18;
-  --foreground: 244 244 245;
+  /* Dark (Bambu-like neutral grey) */
+  --background: 14 14 15;           /* #0e0e0f */
+  --foreground: 244 244 245;        /* #f4f4f5 */
 
-  --surface: 26 26 26;
+  --surface: 24 24 26;              /* #18181a */
   --surface-foreground: 244 244 245;
 
-  --border: 42 42 42;
-  --muted: 39 39 42;
-  --muted-foreground: 156 163 175;
+  --muted: 34 34 36;                /* #222224 */
+  --muted-foreground: 161 161 170;  /* #a1a1aa */
+
+  --border: 58 58 60;               /* #3a3a3c */
 }
 
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  ::placeholder {
+    @apply text-muted-foreground;
+  }
+}
+
+/* optional: nicer focus ring */
 :focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 174, 66, 0.35);
@@ -36,21 +58,27 @@
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-border bg-surface text-surface-foreground;
-  }
-
-  .input {
-    @apply w-full rounded-lg border border-border bg-background px-4 py-2 text-foreground
-           focus:outline-none focus:ring-2 focus:ring-primary;
+    @apply rounded-2xl border bg-surface text-surface-foreground;
   }
 
   .btn-primary {
     @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition;
-    @apply bg-primary text-primary-foreground hover:opacity-90;
+    @apply bg-primary text-primary-foreground hover:bg-primary-hover;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-lg px-3 py-2 font-medium transition;
-    @apply bg-muted text-foreground hover:opacity-90;
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition;
+    @apply hover:bg-muted text-muted-foreground;
+  }
+
+  .input {
+    @apply w-full rounded-lg border bg-muted px-4 py-2 text-foreground;
+    @apply placeholder:text-muted-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/40;
+  }
+
+  .select {
+    @apply w-full rounded-lg border bg-muted px-4 py-2 text-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/40;
   }
 }
