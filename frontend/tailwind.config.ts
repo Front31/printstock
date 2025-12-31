@@ -1,3 +1,4 @@
+// tailwind.config.ts
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
@@ -7,22 +8,20 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#00ae42',
-          hover: '#009636',
-          soft: '#e6f7ed',
+          DEFAULT: 'rgb(var(--primary) / <alpha-value>)',
+          foreground: 'rgb(var(--primary-foreground) / <alpha-value>)',
         },
 
-        'bg-light': '#f5f6f7',
-        'bg-dark': '#121212',
+        background: 'rgb(var(--background) / <alpha-value>)',
+        foreground: 'rgb(var(--foreground) / <alpha-value>)',
 
-        'surface-light': '#ffffff',
-        'surface-dark': '#1a1a1a',
+        surface: 'rgb(var(--surface) / <alpha-value>)',
+        'surface-foreground': 'rgb(var(--surface-foreground) / <alpha-value>)',
 
-        'border-light': '#e5e7eb',
-        'border-dark': '#2a2a2a',
+        border: 'rgb(var(--border) / <alpha-value>)',
 
-        'muted-light': '#6b7280',
-        'muted-dark': '#9ca3af',
+        muted: 'rgb(var(--muted) / <alpha-value>)',
+        'muted-foreground': 'rgb(var(--muted-foreground) / <alpha-value>)',
       },
     },
   },
